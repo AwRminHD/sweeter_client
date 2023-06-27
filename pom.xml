@@ -12,6 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.2</junit.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -39,9 +41,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.15.0</version>
+            <groupId>mysql</groupId> <!-- Replace with your database vendor, e.g., oracle, postgresql -->
+            <artifactId>mysql-connector-java</artifactId> <!-- Replace with the appropriate JDBC driver for your database -->
+            <version>8.0.27</version> <!-- Replace with the appropriate driver version -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.1</version> <!-- Replace with the appropriate driver version -->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -49,44 +57,19 @@
             <version>2.15.0</version>
         </dependency>
         <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
+            <artifactId>jackson-databind</artifactId>
             <version>2.15.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.lbovolini</groupId>
-            <artifactId>ObjectMapper</artifactId>
-            <version>0.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.konghq</groupId>
-            <artifactId>unirest-objectmapper-jackson</artifactId>
-            <version>4.0.0-RC7</version>
-        </dependency>
-        <dependency>
-            <groupId>com.xellitix.commons</groupId>
-            <artifactId>jackson-utils</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.javiercanillas</groupId>
-            <artifactId>jackson-masker</artifactId>
-            <version>0.9.9</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.javiercanillas</groupId>
-            <artifactId>jackson-masker</artifactId>
-            <version>0.9.9</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.javiercanillas</groupId>
-            <artifactId>jackson-masker</artifactId>
-            <version>0.9.9</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.javiercanillas</groupId>
-            <artifactId>jackson-masker</artifactId>
-            <version>0.9.9</version>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
         </dependency>
     </dependencies>
 

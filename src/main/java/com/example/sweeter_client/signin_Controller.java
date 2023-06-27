@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
+import com.fasterxml.jackson.databind.*;
 
 public class signin_Controller implements Initializable {
     @FXML
@@ -69,7 +71,7 @@ public class signin_Controller implements Initializable {
         boolean a6 = Phone_tf.getText().length() == 0;
         boolean a7 = Country.length() == 0;
         boolean a8 = date.length() == 0;
-        System.out.println(date + " " + Country);
+
         if (a1 || a2 || a3 || a4 || (a5 && a6) || a7 || a8) {
             wrong_label.setText("please enter all fields");
         }
@@ -107,12 +109,28 @@ public class signin_Controller implements Initializable {
                     //sending post request
                     URL url = new URL("http://localhost:8080/users/" + Username_tf.getText());
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                    con.setRequestMethod("POST");
 
-//                    ObjectMapper objectMapper = new ObjectMapper();
-//                    String json = objectMapper.writeValueAsString(user);
 
-                    GreenLabel.setText("Register completed");
+                    ObjectMapper objectMapper = new ObjectMapper();
+//                    System.out.println("okeye");
+                    String json = objectMapper.writeValueAsString(user);
+
+//                    byte[] postDataBytes = json.getBytes();
+//
+//                    con.setRequestMethod("POST");
+//                    con.setDoOutput(true);
+//                    con.getOutputStream().write(postDataBytes);
+//
+//                    Reader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//                    StringBuilder sb = new StringBuilder();
+//                    for (int c; (c = in.read()) > 0;)
+//                        sb.append((char) c);
+//                    response = sb.toString();
+//
+//                    if (response.equals("this is done!"))
+//                        GreenLabel.setText("Register completed");
+//                    else
+//                        wrong_label.setText("RiDi da");
                 }
             }
             catch (ConnectException e) {
