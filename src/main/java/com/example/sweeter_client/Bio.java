@@ -1,4 +1,4 @@
-package com.example.sweeter_client.models;
+package com.example.sweeter_client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 public class Bio {

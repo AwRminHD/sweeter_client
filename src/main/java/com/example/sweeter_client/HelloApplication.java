@@ -1,6 +1,5 @@
 package com.example.sweeter_client;
 
-import com.example.sweeter_client.models.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

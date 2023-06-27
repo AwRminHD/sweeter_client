@@ -50,7 +50,7 @@
             <TextField fx:id="Username_tf" layoutX="148.0" layoutY="95.0" promptText="Username" />
             <TextField fx:id="Email_tf" layoutX="148.0" layoutY="149.0" promptText="Email" />
             <TextField fx:id="Phone_tf" layoutX="487.0" layoutY="149.0" promptText="Phone Number" />
-            <DatePicker fx:id="datePicker" editable="false" layoutX="148.0" layoutY="199.0" onAction="#getDate" prefHeight="15.0" prefWidth="171.0" promptText="date" />
+            <DatePicker fx:id="datePicker" editable="false" layoutX="148.0" layoutY="199.0" onAction="#getDate" prefHeight="15.0" prefWidth="171.0" promptText="date" style="-fx-background-color: #55ADEE;" />
             <Label layoutX="23.0" layoutY="200.0" text="Birthday date">
                <font>
                   <Font size="18.0" />
@@ -62,14 +62,20 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="Register_button" layoutX="215.0" layoutY="269.0" mnemonicParsing="false" onAction="#Register_pressed" prefHeight="36.0" prefWidth="261.0" style="-fx-background-color: #00093C;" text="Register" textFill="WHITE">
+            <Button fx:id="Register_button" layoutX="411.0" layoutY="281.0" mnemonicParsing="false" onAction="#Register_pressed" prefHeight="36.0" prefWidth="261.0" style="-fx-background-color: #00093C;" text="Register" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
             <PasswordField fx:id="Password_tf" layoutX="487.0" layoutY="95.0" promptText="Password" />
-            <Label fx:id="wrong_label" layoutX="216.0" layoutY="245.0" textFill="RED" />
-            <Label fx:id="GreenLabel" layoutX="216.0" layoutY="245.0" textFill="#46ff00" />
+            <Label fx:id="wrong_label" layoutX="413.0" layoutY="253.0" prefHeight="16.0" prefWidth="245.0" textFill="RED" />
+            <Label fx:id="GreenLabel" layoutX="411.0" layoutY="265.0" prefHeight="16.0" prefWidth="232.0" textFill="#46ff00" />
+            <Label layoutX="12.0" layoutY="251.0" text="Password check">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="PasswordCheck_tf" layoutX="174.0" layoutY="249.0" promptText="Password Check" />
          </children>
       </AnchorPane>
       <ImageView fitHeight="70.0" fitWidth="72.0" layoutX="376.0" pickOnBounds="true" preserveRatio="true">

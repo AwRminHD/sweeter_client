@@ -1,17 +1,14 @@
 package com.example.sweeter_client;
 
-import com.example.sweeter_client.models.User;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,12 +18,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.concurrent.CountDownLatch;
-import com.fasterxml.jackson.databind.*;
 
 public class signin_Controller implements Initializable {
     @FXML
@@ -49,12 +43,14 @@ public class signin_Controller implements Initializable {
     Label GreenLabel;
     @FXML
     Label wrong_label;
+    @FXML
+    PasswordField PasswordCheck_tf;
     String Country = "";
     String date = "";
     public void goBack() throws Exception {
         Clear();
         HelloApplication m = new HelloApplication();
-        m.changeScene(1 );
+        m.changeScene(1);
     }
     public void Select(ActionEvent event) {
         Country = Countries.getSelectionModel().getSelectedItem().toString();
@@ -71,22 +67,24 @@ public class signin_Controller implements Initializable {
         boolean a6 = Phone_tf.getText().length() == 0;
         boolean a7 = Country.length() == 0;
         boolean a8 = date.length() == 0;
-
-        if (a1 || a2 || a3 || a4 || (a5 && a6) || a7 || a8) {
+        boolean a9 = PasswordCheck_tf.getText().length() == 0;
+        if (a1 || a2 || a3 || a4 || (a5 && a6) || a7 || a8 || a9) {
             wrong_label.setText("please enter all fields");
         }
         else if (Email_tf.getText().length() != 0 && !isValidEmailAddress(Email_tf.getText())) {
             wrong_label.setText("Email is invalid");
         }
         else if (!isValidPass(Password_tf.getText())) {
-            System.out.println(Password_tf.getText());
             wrong_label.setText("Password is invalid");
+        }
+        else if (!PasswordCheck_tf.getText().equals(Password_tf.getText())) {
+            wrong_label.setText("Passwords are not equal");
         }
         else {
             try {
                 String response;
                 {
-                    URL url = new URL("http://localhost:8080/users/" + Username_tf.getText());
+                    URL url = new URL("http://localhost:8080/users");
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("GET");
                     int responseCode = con.getResponseCode();
@@ -99,38 +97,67 @@ public class signin_Controller implements Initializable {
                     in.close();
                     response = response1.toString();
                 }
-                if (!response.equals("No User")) {
-                    wrong_label.setText("Username exist");
+                JSONArray jsonObject = new JSONArray(response);
+                String[] users = toStringArray(jsonObject);
+                boolean Email_existed = false;
+                for (String t: users) {
+                    JSONObject obj = new JSONObject(t);
+                    User user = new User(obj.getString("id"), obj.getString("firstName"), obj.getString("lastName"), obj.getString("email"), obj.getString("phoneNumber"), obj.getString("password"), obj.getString("country"), null);
+                    if (user.getEmail().equals(Email_tf.getText()) && Email_tf.getText().length() != 0)
+                        Email_existed = true;
+                    if (user.getPhoneNumber().equals(Phone_tf.getText()) && Phone_tf.getText().length() != 0)
+                        Email_existed = true;
+                }
+                if (Email_existed) {
+                    wrong_label.setText("Email or Phone existed");
                 }
                 else {
-                    DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-                    Date date1 = format.parse(date);
-                    User user = new User(Username_tf.getText(), FirstName_tf.getText(), LastName_tf.getText(), Email_tf.getText(), Phone_tf.getText(), Password_tf.getText(), Country, date1);
-                    //sending post request
-                    URL url = new URL("http://localhost:8080/users/" + Username_tf.getText());
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    {
+                        URL url = new URL("http://localhost:8080/users/" + Username_tf.getText());
+                        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                        con.setRequestMethod("GET");
+                        int responseCode = con.getResponseCode();
+                        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                        String inputline;
+                        StringBuffer response1 = new StringBuffer();
+                        while ((inputline = in.readLine()) != null) {
+                            response1.append(inputline);
+                        }
+                        in.close();
+                        response = response1.toString();
+                    }
+                    if (!response.equals("No User")) {
+                        wrong_label.setText("Username exist");
+                    } else {
+                        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                        Date date1 = format.parse(date);
+                        User user = new User(Username_tf.getText(), FirstName_tf.getText(), LastName_tf.getText(), Email_tf.getText(), Phone_tf.getText(), Password_tf.getText(), Country, date1);
+                        //sending post request
+                        URL url = new URL("http://localhost:8080/users");
+                        HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 
-                    ObjectMapper objectMapper = new ObjectMapper();
-//                    System.out.println("okeye");
-                    String json = objectMapper.writeValueAsString(user);
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        String json = objectMapper.writeValueAsString(user);
 
-//                    byte[] postDataBytes = json.getBytes();
-//
-//                    con.setRequestMethod("POST");
-//                    con.setDoOutput(true);
-//                    con.getOutputStream().write(postDataBytes);
-//
-//                    Reader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//                    StringBuilder sb = new StringBuilder();
-//                    for (int c; (c = in.read()) > 0;)
-//                        sb.append((char) c);
-//                    response = sb.toString();
-//
-//                    if (response.equals("this is done!"))
-//                        GreenLabel.setText("Register completed");
-//                    else
-//                        wrong_label.setText("RiDi da");
+                        byte[] postDataBytes = json.getBytes();
+
+                        con.setRequestMethod("POST");
+                        con.setDoOutput(true);
+                        con.getOutputStream().write(postDataBytes);
+
+                        Reader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+                        for (int c; (c = in.read()) > 0; )
+                            sb.append((char) c);
+                        response = sb.toString();
+
+                        if (response.equals("this is done!")) {
+                            Clear();
+                            GreenLabel.setText("Register completed");
+                        } else
+                            wrong_label.setText("Server error");
+                    }
                 }
             }
             catch (ConnectException e) {
@@ -163,11 +190,21 @@ public class signin_Controller implements Initializable {
         Email_tf.setText("");
         GreenLabel.setText("");
         wrong_label.setText("");
+        PasswordCheck_tf.setText("");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList <String> list = FXCollections.observableArrayList("IRAN", "USA", "IRAQ", "TURKEY", "SPAIN", "UK", "DENMARK", "RUSSIA");
         Countries.setItems(list);
+    }
+    public static String[] toStringArray(JSONArray array) {
+        if(array == null)
+            return new String[0];
+
+        String[] arr = new String[array.length()];
+        for(int i = 0; i < arr.length; i++)
+            arr[i] = array.optString(i);
+        return arr;
     }
 }
