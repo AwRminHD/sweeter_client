@@ -24,27 +24,43 @@ import java.util.ResourceBundle;
 
 public class signin_Controller implements Initializable {
     @FXML
-    TextField FirstName_tf;
+    private ComboBox Countries;
+
     @FXML
-    TextField LastName_tf;
+    private TextField Email_tf;
+
     @FXML
-    TextField Username_tf;
+    private TextField FirstName_tf;
+
     @FXML
-    TextField Password_tf;
+    private Label GreenLabel;
+
     @FXML
-    TextField Email_tf;
+    private TextField LastName_tf;
+
     @FXML
-    TextField Phone_tf;
+    private PasswordField PasswordCheck_tf;
+
     @FXML
-    DatePicker datePicker;
+    private PasswordField Password_tf;
+
     @FXML
-    ComboBox Countries;
+    private TextField Phone_tf;
+
     @FXML
-    Label GreenLabel;
+    private Button Register_button;
+
     @FXML
-    Label wrong_label;
+    private TextField Username_tf;
+
     @FXML
-    PasswordField PasswordCheck_tf;
+    private Button back_button;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private Label wrong_label;
     String Country = "";
     String date = "";
     public void goBack() throws Exception {
@@ -58,6 +74,19 @@ public class signin_Controller implements Initializable {
     public void getDate(ActionEvent event) {
         date = datePicker.getValue().toString();
     }
+    public void Back_button_Entered() {
+        back_button.setStyle("-fx-background-color: #9136FF;");
+    }
+    public void Back_button_exit() {
+        back_button.setStyle("-fx-background-color: #00093C;");
+    }
+    public void register_button_entered() {
+        Register_button.setStyle("-fx-background-color: #2200A9;");
+    }
+    public void register_button_exit() {
+        Register_button.setStyle("-fx-background-color: #00093C;");
+    }
+
     public void Register_pressed(ActionEvent event) throws Exception {
         boolean a1 = FirstName_tf.getText().length() == 0;
         boolean a2 = LastName_tf.getText().length() == 0;

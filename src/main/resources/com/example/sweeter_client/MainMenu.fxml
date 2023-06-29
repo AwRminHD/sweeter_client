@@ -9,46 +9,54 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="468.0" prefWidth="822.0" style="-fx-background-color: #00093C;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sweeter_client.login_Controller">
+<AnchorPane prefHeight="681.0" prefWidth="1117.0" style="-fx-background-color: #00093C;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sweeter_client.login_Controller">
    <children>
-      <AnchorPane layoutX="434.0" layoutY="60.0" prefHeight="349.0" prefWidth="351.0" style="-fx-background-color: #55ADEE;">
+      <AnchorPane layoutX="517.0" layoutY="92.0" prefHeight="497.0" prefWidth="550.0" style="-fx-background-color: #55ADEE;">
          <children>
-            <Label layoutX="116.0" layoutY="23.0" text="sign in">
+            <Label fx:id="wrong_pass_label" layoutX="229.0" layoutY="134.0" prefHeight="18.0" prefWidth="311.0" textFill="RED">
                <font>
-                  <Font size="36.0" />
+                  <Font size="14.0" />
+               </font></Label>
+            <Label layoutX="170.0" layoutY="35.0" text="sign in">
+               <font>
+                  <Font size="64.0" />
                </font>
             </Label>
-            <Label layoutX="25.0" layoutY="121.0" text="Username">
+            <Label layoutX="33.0" layoutY="169.0" text="Username">
                <font>
-                  <Font size="20.0" />
+                  <Font size="30.0" />
                </font>
             </Label>
-            <Label layoutX="29.0" layoutY="187.0" text="Password">
+            <Label layoutX="38.0" layoutY="257.0" text="Password">
                <font>
-                  <Font size="20.0" />
+                  <Font size="30.0" />
                </font>
             </Label>
-            <TextField fx:id="Username_textfield" layoutX="145.0" layoutY="117.0" prefHeight="33.0" prefWidth="180.0" promptText="Username" />
-            <PasswordField fx:id="Password_textfeild" layoutX="145.0" layoutY="183.0" prefHeight="33.0" prefWidth="180.0" promptText="Password" />
-            <Button fx:id="login_button" layoutX="79.0" layoutY="267.0" mnemonicParsing="false" onAction="#userLogIn" prefHeight="44.0" prefWidth="194.0" style="-fx-background-color: #00093C;" text="sign in" textFill="WHITE">
+            <TextField fx:id="Username_textfield" layoutX="229.0" layoutY="164.0" prefHeight="46.0" prefWidth="261.0" promptText="Username" />
+            <PasswordField fx:id="Password_textfeild" layoutX="229.0" layoutY="252.0" prefHeight="46.0" prefWidth="261.0" promptText="Password" />
+            <Button fx:id="login_button" layoutX="141.0" layoutY="357.0" mnemonicParsing="false" onAction="#userLogIn" onMouseEntered="#login_button_entered" onMouseExited="#login_button_exit" prefHeight="54.0" prefWidth="269.0" style="-fx-background-color: #00093C;" text="sign in" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Label fx:id="wrong_pass_label" layoutX="145.0" layoutY="90.0" textFill="RED" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../resources/com/example/sweeter_client/pictures/user.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
-      <Label layoutX="28.0" layoutY="253.0" text="Welcom to Sweeter" textFill="WHITE">
+      <Label layoutX="67.0" layoutY="334.0" text="Welcom to Sweeter" textFill="WHITE">
          <font>
-            <Font size="36.0" />
+            <Font size="40.0" />
          </font>
       </Label>
-      <ImageView fitHeight="297.0" fitWidth="368.0" layoutX="56.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="297.0" fitWidth="368.0" layoutX="114.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@pictures/twitter_logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="sign_up_button" layoutX="107.0" layoutY="332.0" mnemonicParsing="false" onAction="#setSign_up_button" prefHeight="44.0" prefWidth="194.0" style="-fx-background-color: #55ADEE;" text="sign up">
+      <Button fx:id="sign_up_button" layoutX="136.0" layoutY="450.0" mnemonicParsing="false" onAction="#setSign_up_button" onMouseEntered="#signup_button_entered" onMouseExited="#signup_button_exit" prefHeight="54.0" prefWidth="269.0" style="-fx-background-color: #55ADEE;" text="sign up">
          <font>
             <Font size="24.0" />
          </font>
