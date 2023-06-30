@@ -20,7 +20,7 @@ public class HelloApplication extends Application {
     private static Scene MainMenu;
     private static Scene SignIn;
     public static User loggedin_user = new User("mahdi", "mahdi", "haeri", "mahdihaerim@gmail.com", "123123123", "123", "Iran", new Date());
-    public static String token = "@YCP;J";
+    public static String token = "@QZV==";
     @Override
     public void start(Stage stage) throws IOException {
         stg = stage;

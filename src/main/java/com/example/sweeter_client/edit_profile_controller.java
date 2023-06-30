@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class edit_profile_controller implements Initializable {
@@ -204,7 +205,9 @@ public class edit_profile_controller implements Initializable {
                 String response;
                 URL url = new URL("http://localhost:8080/media/" + HelloApplication.loggedin_user.getId() + "/Avatar/png");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setRequestProperty(HelloApplication.loggedin_user.getId(), HelloApplication.token);
+
+                con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+
                 System.out.println(HelloApplication.loggedin_user.getId() + "  " + HelloApplication.token);
                 con.setRequestMethod("POST");
                 con.setDoOutput(true);
@@ -227,7 +230,7 @@ public class edit_profile_controller implements Initializable {
                 String response;
                 URL url = new URL("http://localhost:8080/media/" + HelloApplication.loggedin_user.getId() + "/Header/png");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setRequestProperty(HelloApplication.loggedin_user.getId(), HelloApplication.token);
+                con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
                 con.setRequestMethod("POST");
                 con.setDoOutput(true);
                 OutputStream outputStream = con.getOutputStream();

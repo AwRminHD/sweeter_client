@@ -56,9 +56,9 @@ public class UserView_controller implements Initializable {
         setImageToButton(timeline_button, "src/main/resources/com/example/sweeter_client/pictures/timeline.png");
         setImageToButton(tweet_button, "src/main/resources/com/example/sweeter_client/pictures/tweet.png");
         userVBox = new VBox();
-        userVBox.setSpacing(10);
+        userVBox.setSpacing(50);
         userScrollPane.setContent(userVBox);
-        userVBox.setStyle("-fx-background-color: #9cc3d5FF;");
+        userVBox.setStyle("-fx-background-color: #000066;");
         userScrollPane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;");
         for (User usr: users) {
             Bio bio = null;

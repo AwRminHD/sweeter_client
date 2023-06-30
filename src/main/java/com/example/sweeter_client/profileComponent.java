@@ -210,7 +210,8 @@ public class profileComponent extends AnchorPane {
                             URL url = new URL("http://localhost:8080/follows/" + HelloApplication.loggedin_user.getId() + "/" + user.getId());
                             HttpURLConnection con = (HttpURLConnection) url.openConnection();
                             con.setRequestMethod("POST");
-                            con.setRequestProperty(HelloApplication.loggedin_user.getId(), HelloApplication.token);
+                            con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+
 
                             int responseCode = con.getResponseCode();
                             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -242,7 +243,7 @@ public class profileComponent extends AnchorPane {
                             String response;
                             URL url = new URL("http://localhost:8080/follows/" + HelloApplication.loggedin_user.getId() + "/" + user.getId());
                             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                            con.setRequestProperty(HelloApplication.loggedin_user.getId(), HelloApplication.token);
+                            con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
                             con.setRequestMethod("DELETE");
 
                             int responseCode = con.getResponseCode();

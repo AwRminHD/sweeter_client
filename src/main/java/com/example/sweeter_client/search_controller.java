@@ -94,9 +94,9 @@ public class search_controller implements Initializable {
                 userss.add(user);
         }
         vbox = new VBox();
-        vbox.setSpacing(10);
+        vbox.setSpacing(50);
         scrolpane.setContent(vbox);
-        vbox.setStyle("-fx-background-color: #9cc3d5FF;");
+        vbox.setStyle("-fx-background-color: #000066;");
         scrolpane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;");
 
         for (User usr: userss) {
