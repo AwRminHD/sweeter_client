@@ -73,6 +73,8 @@ public class edit_profile_controller implements Initializable {
         HeaderFile = null;
         header_label.setText("");
         Avatar_label.setText("");
+        header_label.setMaxWidth(500);
+        Avatar_label.setMaxWidth(500);
     }
     public void goBack() throws Exception {
         HelloApplication m = new HelloApplication();
