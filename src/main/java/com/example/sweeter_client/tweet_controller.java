@@ -194,6 +194,7 @@ public class tweet_controller implements Initializable {
             String tweetId = savingTweet(tweet);
             if (!tweetId.equals("Connection failed")) {
                 savingPictures(tweetId);
+                savingHashtags(tweetId, TweetTextArea.getText());
                 greenLabel.setText("Tweet successfully Tweeted");
                 redLabel.setText("");
             }
@@ -212,6 +213,7 @@ public class tweet_controller implements Initializable {
             String tweetId = savingTweet(tweet);
             if (!tweetId.equals("Connection failed")) {
                 savingPictures(tweetId);
+                savingHashtags(tweetId, TweetTextArea.getText());
                 greenLabel.setText("Tweet successfully Tweeted");
                 redLabel.setText("");
             }
@@ -220,6 +222,43 @@ public class tweet_controller implements Initializable {
                 greenLabel.setText("");
             }
             Clear();
+        }
+    }
+
+    public void savingHashtags(String tweetID, String text) throws IOException {
+        String[] split = text.split("\\s+");
+        for (String s: split) {
+            if (s.length() >= 2 && s.charAt(0) == '#' && s.charAt(1) != '#') {
+                String x = s.substring(1);
+                System.out.println("checking = " + x);
+                hashtagAdd(tweetID, x);
+            }
+        }
+    }
+    public void hashtagAdd(String tweetID, String hash) throws IOException {
+        try {
+            String response;
+            URL url = new URL("http://localhost:8080/hashtag/" + hash + "/" + tweetID);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestProperty("JWT", HelloApplication.token);
+
+            con.setRequestMethod("POST");
+            con.setDoOutput(true);
+
+            Reader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            for (int c; (c = in.read()) > 0; )
+                sb.append((char) c);
+            response = sb.toString();
+
+            if (response.equals("Done!")) {
+                System.out.println("hashtag saved successfully = " + hash);
+            }
+            else
+                System.out.println(response);
+        }
+        catch (ConnectException e) {
+            System.out.println("Connection failed");
         }
     }
 

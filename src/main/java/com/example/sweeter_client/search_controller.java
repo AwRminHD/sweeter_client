@@ -27,7 +27,9 @@ import java.util.Set;
 
 import static com.example.sweeter_client.edit_profile_controller.gettingBio;
 import static com.example.sweeter_client.profileComponent.IsBlocked;
+import static com.example.sweeter_client.profileComponent.getUser;
 import static com.example.sweeter_client.signin_Controller.toStringArray;
+import static com.example.sweeter_client.tweet_controller.getTweet;
 
 public class search_controller implements Initializable {
     @FXML
@@ -72,47 +74,76 @@ public class search_controller implements Initializable {
 
     public void searching(ActionEvent event) throws IOException {
         String clue = searchTextField.getText().toLowerCase();
-        URL url = new URL("http://localhost:8080/users");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputline;
-        StringBuffer response1 = new StringBuffer();
-        while ((inputline = in.readLine()) != null) {
-            response1.append(inputline);
-        }
-        in.close();
-        String response = response1.toString();
-        JSONArray jsonObject = new JSONArray(response);
-        String[] users = toStringArray(jsonObject);
-
-        ArrayList <User> userss = new ArrayList<>();
-        for (String t: users) {
-            JSONObject obj = new JSONObject(t);
-            User user = new User(obj.getString("id"), obj.getString("firstName"), obj.getString("lastName"), obj.getString("email"), obj.getString("phoneNumber"), obj.getString("password"), obj.getString("country"), null);
-            if (user.getId().toLowerCase().contains(clue) || user.getFirstName().toLowerCase().contains(clue) || user.getLastName().toLowerCase().contains(clue))
-                userss.add(user);
-        }
-        vbox = new VBox();
-        vbox.setSpacing(50);
-        scrolpane.setContent(vbox);
-        vbox.setStyle("-fx-background-color: #000066;");
-        scrolpane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;");
-
-        for (User usr: userss) {
-            Bio bio = null;
-            try {
-                if (IsBlocked(usr, HelloApplication.loggedin_user))
-                    continue;
-                bio = gettingBio(usr);
-                if (bio == null)
-                    bio = new Bio(usr.getId(), "", "", "");
-                profileComponent p = new profileComponent(usr, bio);
-                vbox.getChildren().add(p);
+        if (clue.length() == 0 || clue.charAt(0) != '#') {
+            URL url = new URL("http://localhost:8080/users");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            int responseCode = con.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputline;
+            StringBuffer response1 = new StringBuffer();
+            while ((inputline = in.readLine()) != null) {
+                response1.append(inputline);
             }
-            catch (IOException e) {
-                throw new RuntimeException(e);
+            in.close();
+            String response = response1.toString();
+            JSONArray jsonObject = new JSONArray(response);
+            String[] users = toStringArray(jsonObject);
+
+            ArrayList<User> userss = new ArrayList<>();
+            for (String t : users) {
+                JSONObject obj = new JSONObject(t);
+                User user = new User(obj.getString("id"), obj.getString("firstName"), obj.getString("lastName"), obj.getString("email"), obj.getString("phoneNumber"), obj.getString("password"), obj.getString("country"), null);
+                if (user.getId().toLowerCase().contains(clue) || user.getFirstName().toLowerCase().contains(clue) || user.getLastName().toLowerCase().contains(clue))
+                    userss.add(user);
+            }
+            vbox = new VBox();
+            vbox.setSpacing(50);
+            scrolpane.setContent(vbox);
+            vbox.setStyle("-fx-background-color: #000066;");
+            scrolpane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;");
+
+            for (User usr : userss) {
+                Bio bio = null;
+                try {
+                    if (IsBlocked(usr, HelloApplication.loggedin_user))
+                        continue;
+                    bio = gettingBio(usr);
+                    if (bio == null)
+                        bio = new Bio(usr.getId(), "", "", "");
+                    profileComponent p = new profileComponent(usr, bio);
+                    vbox.getChildren().add(p);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        else {
+            String x = searchTextField.getText().substring(1);
+            URL url = new URL("http://localhost:8080/hashtag/" + x);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            int responseCode = con.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputline;
+            StringBuffer response1 = new StringBuffer();
+            while ((inputline = in.readLine()) != null) {
+                response1.append(inputline);
+            }
+            in.close();
+            String response = response1.toString();
+            String[] tweets = response.split(",");
+
+            vbox = new VBox();
+            vbox.setSpacing(50);
+            scrolpane.setContent(vbox);
+            vbox.setStyle("-fx-background-color: #000066;");
+            scrolpane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;");
+
+            for (String tweetID : tweets) {
+                Tweet t = getTweet(tweetID);
+                if (!IsBlocked(getUser(t.getOwnerId()), HelloApplication.loggedin_user))
+                    vbox.getChildren().add(new tweetComponent(t));
             }
         }
     }

@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import static com.example.sweeter_client.profileComponent.IsBlocked;
 import static com.example.sweeter_client.profileComponent.getUser;
 import static com.example.sweeter_client.signin_Controller.toStringArray;
 import static java.lang.System.in;
@@ -77,10 +78,15 @@ public class timeline_controller implements Initializable {
         for (int i = tweets.size() - 1; i >= 0; i--) {
             Tweet t = tweets.get(i);
             User usr = new User();
+            User usr1 = new User();
             try {
                 usr = getUser(t.getWriterId());
+                usr1 = getUser(t.getOwnerId());
                 if (t.getQuoteTweetId().split("@").length == 2 && t.getQuoteTweetId().split("@")[0].equals("R"))
                     continue;
+                if (IsBlocked(usr1, HelloApplication.loggedin_user))
+                    continue;
+
                 if (IsFollowing(HelloApplication.loggedin_user, usr) || HelloApplication.loggedin_user.getId().equals(t.getWriterId()) || NumberOfLikes(t.getId()) >= 10) {
                     tweetVbox.getChildren().add(new tweetComponent(t));
                 }
