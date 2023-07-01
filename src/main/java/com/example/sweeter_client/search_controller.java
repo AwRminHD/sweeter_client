@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import static com.example.sweeter_client.edit_profile_controller.gettingBio;
+import static com.example.sweeter_client.profileComponent.IsBlocked;
 import static com.example.sweeter_client.signin_Controller.toStringArray;
 
 public class search_controller implements Initializable {
@@ -102,6 +103,8 @@ public class search_controller implements Initializable {
         for (User usr: userss) {
             Bio bio = null;
             try {
+                if (IsBlocked(usr, HelloApplication.loggedin_user))
+                    continue;
                 bio = gettingBio(usr);
                 if (bio == null)
                     bio = new Bio(usr.getId(), "", "", "");

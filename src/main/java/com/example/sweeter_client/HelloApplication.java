@@ -20,7 +20,7 @@ public class HelloApplication extends Application {
     private static Scene MainMenu;
     private static Scene SignIn;
     public static User loggedin_user = new User("mahdi", "mahdi", "haeri", "mahdihaerim@gmail.com", "123123123", "123", "Iran", new Date());
-    public static String token = "@QZV==";
+    public static String token = "mahdi!@QZV==";
     @Override
     public void start(Stage stage) throws IOException {
         stg = stage;
@@ -29,7 +29,7 @@ public class HelloApplication extends Application {
         MainMenu = new Scene((new FXMLLoader(HelloApplication.class.getResource("MainMenu.fxml"))).load());
         SignIn = new Scene((new FXMLLoader(HelloApplication.class.getResource("SigninMenu.fxml"))).load());
         stage.setTitle("Sweeter");
-        stage.setScene(MainMenu);
+        stage.setScene(new Scene((new FXMLLoader(HelloApplication.class.getResource("forUpage.fxml"))).load()));
         stage.show();
 
     }

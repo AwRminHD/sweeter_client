@@ -515,7 +515,6 @@ public class tweetComponent extends AnchorPane {
         response = response1.toString();
         JSONArray jsonObject = new JSONArray(response);
         String[] users = toStringArray(jsonObject);
-        boolean Email_existed = false;
         ArrayList <Like> likes = new ArrayList<>();
         for (String t: users) {
             JSONObject obj = new JSONObject(t);

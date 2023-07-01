@@ -45,13 +45,14 @@ public class profileComponent extends AnchorPane {
     Label NumberFollowersLabel;
     Label NumberFollowingLabel;
     Button FollowButton;
+    Button blockButton;
     Label nameLabel;
     Label bioLabel;
     Label webLabel;
     Label locLabel;
+    Button blocklistLabel;
     TextField webTextField;
     TextField locTextField;
-
     JFXTextArea bioTextArea;
     User user;
     Bio bio;
@@ -69,11 +70,14 @@ public class profileComponent extends AnchorPane {
         NumberFollowersLabel = new Label(Integer.toString(NumFollowers(user)));
         NumberFollowingLabel = new Label(Integer.toString(NumFollowing(user)));
         FollowButton = new Button();
+        blockButton = new Button();
 
         nameLabel = new Label(user.getFirstName());
         bioLabel = new Label("Bio");
         webLabel = new Label("Website");
         locLabel = new Label("Location");
+        blocklistLabel = new Button("Blocklist(" + numOfBlocks(HelloApplication.loggedin_user) + ")");
+
 
         bioTextArea = new JFXTextArea();
         bioTextArea.setText(bio.getBiography());
@@ -97,7 +101,9 @@ public class profileComponent extends AnchorPane {
         this.getChildren().addAll(circleClipProfile, HeaderImageView, user_idLabel, nameLabel, followersLabel, followingLabel, NumberFollowersLabel, NumberFollowingLabel,
                 bioLabel, bioTextArea, webLabel, locLabel, webTextField, locTextField);
         if (!HelloApplication.loggedin_user.getId().equals(user.getId()))
-            this.getChildren().add(FollowButton);
+            this.getChildren().addAll(FollowButton, blockButton);
+        else
+            this.getChildren().add(blocklistLabel);
     }
 
     private void setConfig() throws IOException {
@@ -105,6 +111,10 @@ public class profileComponent extends AnchorPane {
         this.setStyle("-fx-background-color: #192841");
         user_idLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
         user_idLabel.setTextFill(Paint.valueOf("gray"));
+
+        blocklistLabel.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20));
+        blocklistLabel.setTextFill(Paint.valueOf("white"));
+
         circleClipProfile.setFill(new ImagePattern(AvatarImage));
         nameLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 30));
         nameLabel.setTextFill(Paint.valueOf("white"));
@@ -123,12 +133,22 @@ public class profileComponent extends AnchorPane {
 
         FollowButton.setPrefSize(260, 30);
         FollowButton.setStyle("-fx-background-color: gray");
+
+        blockButton.setPrefSize(260, 30);
+        blockButton.setStyle("-fx-background-color: gray");
+
         if (IsFollowing(HelloApplication.loggedin_user, user))
             FollowButton.setText("UnFollow");
         else
             FollowButton.setText("Follow");
 
+        if (IsBlocked(HelloApplication.loggedin_user, user))
+            blockButton.setText("UnBlock");
+        else
+            blockButton.setText("Block");
+
         FollowButton.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        blockButton.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
         bioLabel.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 25));
         bioLabel.setTextFill(Paint.valueOf("white"));
@@ -153,8 +173,11 @@ public class profileComponent extends AnchorPane {
         locTextField.setPrefSize(400, 15);
         locTextField.setEditable(false);
         locTextField.setStyle("-fx-text-fill: white;" + "-fx-background-color: #192841;");
+
+        blocklistLabel.setStyle("-fx-text-fill: white;" + "-fx-background-color: #192841;");
     }
     private void setLocation() {
+        int x = 40;
         AnchorPane.setTopAnchor(circleClipProfile, 220.0);
         AnchorPane.setLeftAnchor(circleClipProfile, 10.0);
 
@@ -179,31 +202,152 @@ public class profileComponent extends AnchorPane {
         AnchorPane.setLeftAnchor(FollowButton, 290.0);
         AnchorPane.setTopAnchor(FollowButton, 305.0);
 
+        AnchorPane.setLeftAnchor(blocklistLabel, 290.0);
+        AnchorPane.setTopAnchor(blocklistLabel, 305.0);
+
+        AnchorPane.setLeftAnchor(blockButton, 290.0);
+        AnchorPane.setTopAnchor(blockButton, 340.0);
+
         AnchorPane.setLeftAnchor(bioLabel, 30.0);
-        AnchorPane.setTopAnchor(bioLabel, 370.0);
+        AnchorPane.setTopAnchor(bioLabel, 370.0 + x);
 
         AnchorPane.setLeftAnchor(bioTextArea, 150.0);
-        AnchorPane.setTopAnchor(bioTextArea, 365.0);
+        AnchorPane.setTopAnchor(bioTextArea, 365.0 + x);
 
         AnchorPane.setLeftAnchor(webLabel, 10.0);
-        AnchorPane.setTopAnchor(webLabel, 600.0);
+        AnchorPane.setTopAnchor(webLabel, 600.0 + x);
 
         AnchorPane.setLeftAnchor(locLabel, 10.0);
-        AnchorPane.setTopAnchor(locLabel, 670.0);
+        AnchorPane.setTopAnchor(locLabel, 670.0 + x);
 
         AnchorPane.setLeftAnchor(webTextField, 150.0);
-        AnchorPane.setTopAnchor(webTextField, 595.0);
+        AnchorPane.setTopAnchor(webTextField, 595.0 + x);
 
         AnchorPane.setLeftAnchor(locTextField, 150.0);
-        AnchorPane.setTopAnchor(locTextField, 665.0);
+        AnchorPane.setTopAnchor(locTextField, 665.0 + x);
     }
     private void setAction() {
+        blocklistLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                blocklistLabel.setStyle("-fx-background-color: #9136FF;");
+            }
+        });
+        blocklistLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                blocklistLabel.setStyle("-fx-background-color: transparent;");
+            }
+        });
+        blocklistLabel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                HelloApplication m = new HelloApplication();
+                UserView_controller.users = new ArrayList<>();
+                ArrayList <Block> blocks = getAllBlock();
+                for (Block b: blocks) {
+                    if (b.getBlocker().equals(user.getId())) {
+                        try {
+                            UserView_controller.users.add(getUser(b.getBlocked()));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+
+                try {
+                    m.changeScene(9);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        blockButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    if (!IsBlocked(HelloApplication.loggedin_user, user)) {
+                        try {
+                            String response;
+                            URL url = new URL("http://localhost:8080/blocks/" + HelloApplication.loggedin_user.getId() + "/" + user.getId());
+                            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                            con.setRequestMethod("POST");
+                            con.setRequestProperty("JWT", HelloApplication.token);
+
+
+                            int responseCode = con.getResponseCode();
+                            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                            String inputline;
+                            StringBuffer response1 = new StringBuffer();
+                            while ((inputline = in.readLine()) != null) {
+                                response1.append(inputline);
+                            }
+                            in.close();
+                            response = response1.toString();
+                            if (response.equals("Done!")) {
+                                System.out.println("Blocked");
+                                blockButton.setText("UnBlock");
+                            }
+                            else {
+                                System.out.println(response);
+                            }
+
+
+                        }
+                        catch (ConnectException e) {
+                            System.out.println("Connection failed");
+                        }
+                    }
+                    else {
+                        try {
+                            System.out.println("checking2");
+                            String response;
+                            URL url = new URL("http://localhost:8080/blocks/" + HelloApplication.loggedin_user.getId() + "/" + user.getId());
+                            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                            con.setRequestProperty("JWT", HelloApplication.token);
+                            con.setRequestMethod("DELETE");
+
+                            int responseCode = con.getResponseCode();
+                            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                            String inputline;
+                            StringBuffer response1 = new StringBuffer();
+                            while ((inputline = in.readLine()) != null) {
+                                response1.append(inputline);
+                            }
+                            in.close();
+                            response = response1.toString();
+
+                            if (response.equals("Done!")) {
+                                System.out.println("UnBlocked");
+                                blockButton.setText("Block");
+                            }
+                            else {
+                                System.out.println(response);
+                            }
+                        }
+                        catch (ConnectException e) {
+                            System.out.println("Connection failed");
+                        }
+                    }
+
+                    NumberFollowersLabel.setText(Integer.toString(NumFollowers(user)));
+                    NumberFollowingLabel.setText(Integer.toString(NumFollowing(user)));
+                    if (IsFollowing(HelloApplication.loggedin_user, user)) {
+                        FollowButton.setText("UnFollow");
+                    }
+                    else {
+                        FollowButton.setText("Follow");
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         FollowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("checking");
                 try {
-
                     if (!IsFollowing(HelloApplication.loggedin_user, user)) {
                         try {
                             String response;
@@ -346,6 +490,25 @@ public class profileComponent extends AnchorPane {
                 }
             }
         });
+    }
+
+    public static boolean IsBlocked(User user, User user1) {
+        ArrayList <Block> blocks = getAllBlock();
+        for (Block b: blocks) {
+            if (user.getId().equals(b.getBlocker()) && user1.getId().equals(b.getBlocked()))
+                return true;
+        }
+        return false;
+    }
+
+    public int numOfBlocks(User user) {
+        ArrayList <Block> blocks = getAllBlock();
+        int res = 0;
+        for (Block b: blocks) {
+            if (b.getBlocker().equals(user.getId()))
+                res++;
+        }
+        return res;
     }
     public static User getUser(String user_id) throws IOException {
         try {
@@ -511,5 +674,37 @@ public class profileComponent extends AnchorPane {
             Image image = new Image(Path.of("src/main/resources/com/example/sweeter_client/assets/default.png").toUri().toString());
             return image;
         }
+    }
+
+    public static ArrayList <Block> getAllBlock() {
+        ArrayList <Block> res = new ArrayList<>();
+        try {
+            String response;
+            URL url = new URL("http://localhost:8080/blocks");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+
+            int responseCode = con.getResponseCode();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputline;
+            StringBuffer response1 = new StringBuffer();
+            while ((inputline = in.readLine()) != null) {
+                response1.append(inputline);
+            }
+            in.close();
+            response = response1.toString();
+            JSONArray jsonObject = new JSONArray(response);
+            String[] blocks = toStringArray(jsonObject);
+            ArrayList <Like> likes = new ArrayList<>();
+            for (String t: blocks) {
+                JSONObject obj = new JSONObject(t);
+                Block b = new Block(obj.getString("blocker"), obj.getString("blocked"));
+                res.add(b);
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
     }
 }
