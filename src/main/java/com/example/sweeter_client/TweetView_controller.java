@@ -11,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -25,7 +26,10 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-public class UserView_controller implements Initializable {
+import static com.example.sweeter_client.signin_Controller.toStringArray;
+import static java.lang.System.in;
+
+public class TweetView_controller implements Initializable {
     @FXML
     private Button direct_button;
 
@@ -43,11 +47,12 @@ public class UserView_controller implements Initializable {
     @FXML
     private Button back_button;
     @FXML
-    private ScrollPane userScrollPane;
+    private ScrollPane tweetScrollPane;
 
-    private VBox userVBox;
+    private VBox tweetVbox;
 
-    public static ArrayList<User> users = new ArrayList<>();
+    public static Tweet tweet = new Tweet("", "", "", "", "", new Date(), 0, 0 ,0);
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setImageToButton(prof_button, "src/main/resources/com/example/sweeter_client/pictures/user.png");
@@ -55,24 +60,33 @@ public class UserView_controller implements Initializable {
         setImageToButton(search_button, "src/main/resources/com/example/sweeter_client/pictures/search.png");
         setImageToButton(timeline_button, "src/main/resources/com/example/sweeter_client/pictures/timeline.png");
         setImageToButton(tweet_button, "src/main/resources/com/example/sweeter_client/pictures/tweet.png");
-        userVBox = new VBox();
-        userVBox.setSpacing(50);
-        userScrollPane.setContent(userVBox);
-        userVBox.setStyle("-fx-background-color: #000066;");
-        userScrollPane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;" + "-fx-focus-color: transparent;" + "-fx-faint-focus-color: transparent;");
-        for (User usr: users) {
-            Bio bio = null;
+        tweetVbox = new VBox();
+        tweetVbox.setSpacing(50);
+        tweetScrollPane.setContent(tweetVbox);
+        tweetVbox.setStyle("-fx-background-color: #000066;");
+        tweetScrollPane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;" + "-fx-focus-color: transparent;" + "-fx-faint-focus-color: transparent;");
+
+        try {
+            tweetVbox.getChildren().add(new tweetComponent(tweet));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        ArrayList <Tweet> tweets = new ArrayList<>();
+        try {
+            tweets = getAllTweets();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Tweet t: tweets) {
             try {
-                bio = gettingBio(usr);
-                if (bio == null)
-                    bio = new Bio(usr.getId(), "", "", "");
-                profileComponent p = new profileComponent(usr, bio);
-                userVBox.getChildren().add(p);
-            }
-            catch (IOException e) {
+                if (t.getQuoteTweetId().split("@").length == 2 && t.getQuoteTweetId().split("@")[0].equals("R") && t.getQuoteTweetId().split("@")[1].equals(tweet.getId()))
+                    tweetVbox.getChildren().add(new tweetComponent(t));
+
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 
@@ -89,34 +103,41 @@ public class UserView_controller implements Initializable {
         Clear();
         m.changeScene(2);
     }
+
     public void setDirect_button(ActionEvent event) throws Exception {
         HelloApplication m = new HelloApplication();
         Clear();
         m.changeScene(7);
     }
+
     public void setSearch_button(ActionEvent event) throws Exception {
         HelloApplication m = new HelloApplication();
         Clear();
         m.changeScene(6);
     }
+
     public void setTimeline_button(ActionEvent event) throws Exception {
         HelloApplication m = new HelloApplication();
         Clear();
         m.changeScene(4);
     }
+
     public void setTweet_button(ActionEvent event) throws Exception {
         HelloApplication m = new HelloApplication();
         Clear();
         m.changeScene(5);
     }
+
     public void goBack() throws Exception {
         HelloApplication m = new HelloApplication();
         Clear();
-        m.changeScene(1);
+        m.changeScene(2);
     }
+
     public void Back_button_Entered() {
         back_button.setStyle("-fx-background-color: #9136FF;");
     }
+
     public void Back_button_exit() {
         back_button.setStyle("-fx-background-color: #192841;");
     }
@@ -124,34 +145,38 @@ public class UserView_controller implements Initializable {
     public void Clear() {
 
     }
-    public static Bio gettingBio(User user) throws IOException {
-        try {
-            String response;
-            URL url = new URL("http://localhost:8080/bios/" + user.getId());
 
+    public static ArrayList<Tweet> getAllTweets() throws IOException {
+        ArrayList<Tweet> res = new ArrayList<>();
+        try {
+            HelloApplication m = new HelloApplication();
+            URL url = new URL("http://localhost:8080/tweets");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
-
             int responseCode = con.getResponseCode();
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputline;
-            StringBuffer response1 = new StringBuffer();
-            while ((inputline = in.readLine()) != null) {
-                response1.append(inputline);
+            BufferedReader in1 = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputline1;
+            StringBuffer response2 = new StringBuffer();
+            while ((inputline1 = in1.readLine()) != null) {
+                response2.append(inputline1);
             }
             in.close();
-            response = response1.toString();
+            String response = response2.toString();
+            JSONArray obj = new JSONArray(response);
+            String[] tweets = toStringArray(obj);
+            for (String tt : tweets) {
+                JSONObject jsonObject = new JSONObject(tt);
+                Tweet tweet = new Tweet(jsonObject.getString("id"), jsonObject.getString("writerId"), jsonObject.getString("ownerId"), jsonObject.getString("text"), jsonObject.getString("quoteTweetId"), new Date(jsonObject.getLong("createdAt")), jsonObject.getInt("likes"), jsonObject.getInt("retweets"), jsonObject.getInt("replies"));
+                String[] t = toStringArray(jsonObject.getJSONArray("mediaPaths"));
+                for (String x : t)
+                    tweet.getMediaPaths().add(x);
 
-            if (response.equals("no bio"))
-                return new Bio(user.getId(), "", "", "");
-
-            JSONObject jsonObject = new JSONObject(response);
-            Bio bio = new Bio(user.getId(), jsonObject.getString("biography"), jsonObject.getString("location"), jsonObject.getString("website"));
-            System.out.println(bio);
-            return bio;
+                res.add(tweet);
+            }
         }
         catch (ConnectException e) {
-            return null;
+            return res;
         }
+        return res;
     }
 }

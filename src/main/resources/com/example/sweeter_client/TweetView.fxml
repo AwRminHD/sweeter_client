@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="939.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sweeter_client.timeline_controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="939.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sweeter_client.TweetView_controller">
     <center>
         <AnchorPane prefHeight="743.0" prefWidth="600.0" style="-fx-background-color: #192841;" BorderPane.alignment="CENTER">
             <children>
@@ -20,7 +20,7 @@
                 <Button fx:id="direct_button" layoutX="366.0" layoutY="12.0" mnemonicParsing="false" onAction="#setDirect_button" prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: #9cc3d5FF;" />
                 <Button fx:id="search_button" layoutX="246.0" layoutY="12.0" mnemonicParsing="false" onAction="#setSearch_button" prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: #9cc3d5FF;" />
                 <Button fx:id="tweet_button" layoutX="127.0" layoutY="12.0" mnemonicParsing="false" onAction="#setTweet_button" prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: #9cc3d5FF;" />
-                <Button fx:id="timeline_button" layoutX="7.0" layoutY="12.0" mnemonicParsing="false" onAction="#setTimeline_button" prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: #192841;" />
+                <Button fx:id="timeline_button" layoutX="7.0" layoutY="12.0" mnemonicParsing="false" onAction="#setTimeline_button" prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: #9cc3d5FF;" />
             </children>
         </AnchorPane>
     </bottom>

@@ -348,7 +348,7 @@ public class profileComponent extends AnchorPane {
             }
         });
     }
-    public User getUser(String user_id) throws IOException {
+    public static User getUser(String user_id) throws IOException {
         try {
             HelloApplication m = new HelloApplication();
             URL url = new URL("http://localhost:8080/users/" + user_id);
@@ -467,7 +467,7 @@ public class profileComponent extends AnchorPane {
             return 0;
         }
     }
-    public Image getAvatar(User user) throws IOException {
+    public static Image getAvatar(User user) throws IOException {
         try {
             String response;
             URL url = new URL("http://localhost:8080/media/" + user.getId() + "/Avatar/png");
