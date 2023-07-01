@@ -81,8 +81,9 @@ public class timeline_controller implements Initializable {
                 usr = getUser(t.getWriterId());
                 if (t.getQuoteTweetId().split("@").length == 2 && t.getQuoteTweetId().split("@")[0].equals("R"))
                     continue;
-                if (IsFollowing(HelloApplication.loggedin_user, usr) || usr.getId().equals(t.getWriterId()) || NumberOfLikes(t.getId()) >= 10)
+                if (IsFollowing(HelloApplication.loggedin_user, usr) || HelloApplication.loggedin_user.getId().equals(t.getWriterId()) || NumberOfLikes(t.getId()) >= 10) {
                     tweetVbox.getChildren().add(new tweetComponent(t));
+                }
             }
             catch (IOException e) {
                 throw new RuntimeException(e);

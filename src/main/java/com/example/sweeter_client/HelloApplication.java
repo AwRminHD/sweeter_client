@@ -29,7 +29,7 @@ public class HelloApplication extends Application {
         MainMenu = new Scene((new FXMLLoader(HelloApplication.class.getResource("MainMenu.fxml"))).load());
         SignIn = new Scene((new FXMLLoader(HelloApplication.class.getResource("SigninMenu.fxml"))).load());
         stage.setTitle("Sweeter");
-        stage.setScene(new Scene((new FXMLLoader(HelloApplication.class.getResource("Timeline.fxml"))).load()));
+        stage.setScene(MainMenu);
         stage.show();
 
     }

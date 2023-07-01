@@ -60,7 +60,6 @@ public class login_Controller {
                 in.close();
                 String response = response1.toString();
                 HelloApplication.token = con.getHeaderField("JWT");
-                System.out.println("check = " + HelloApplication.token);
                 if (response.equals("userID or userPassWord is incorrect")) {
                     wrong_pass_label.setText("Username or Password is incorrect");
                 }

@@ -210,7 +210,7 @@ public class profileComponent extends AnchorPane {
                             URL url = new URL("http://localhost:8080/follows/" + HelloApplication.loggedin_user.getId() + "/" + user.getId());
                             HttpURLConnection con = (HttpURLConnection) url.openConnection();
                             con.setRequestMethod("POST");
-                            con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+                            con.setRequestProperty("JWT", HelloApplication.token);
 
 
                             int responseCode = con.getResponseCode();
@@ -222,13 +222,12 @@ public class profileComponent extends AnchorPane {
                             }
                             in.close();
                             response = response1.toString();
-
                             if (response.equals("Done!")) {
                                 System.out.println("Followed");
                                 FollowButton.setText("UnFollow");
                             }
                             else {
-                                System.out.println("connection failed");
+                                System.out.println(response);
                             }
 
 
@@ -243,7 +242,7 @@ public class profileComponent extends AnchorPane {
                             String response;
                             URL url = new URL("http://localhost:8080/follows/" + HelloApplication.loggedin_user.getId() + "/" + user.getId());
                             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                            con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+                            con.setRequestProperty("JWT", HelloApplication.token);
                             con.setRequestMethod("DELETE");
 
                             int responseCode = con.getResponseCode();
@@ -261,7 +260,7 @@ public class profileComponent extends AnchorPane {
                                 FollowButton.setText("Follow");
                             }
                             else {
-                                System.out.println("connection failed");
+                                System.out.println(response);
                             }
                         }
                         catch (ConnectException e) {

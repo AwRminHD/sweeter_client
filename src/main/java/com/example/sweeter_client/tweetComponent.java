@@ -411,7 +411,7 @@ public class tweetComponent extends AnchorPane {
                     if (!IsLike(HelloApplication.loggedin_user.getId(), tweet.getId())) {
                         URL url = new URL("http://localhost:8080/like/" + HelloApplication.loggedin_user.getId() + "/" + tweet.getId());
                         HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                        con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+                        con.setRequestProperty("JWT", HelloApplication.token);
                         con.setRequestMethod("POST");
                         int responseCode = con.getResponseCode();
                         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -434,7 +434,7 @@ public class tweetComponent extends AnchorPane {
                     else {
                         URL url = new URL("http://localhost:8080/like/" + HelloApplication.loggedin_user.getId() + "/" + tweet.getId());
                         HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                        con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+                        con.setRequestProperty("JWT", HelloApplication.token);
                         con.setRequestMethod("DELETE");
                         int responseCode = con.getResponseCode();
                         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));

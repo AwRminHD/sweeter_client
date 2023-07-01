@@ -228,7 +228,7 @@ public class tweet_controller implements Initializable {
             String response;
             URL url = new URL("http://localhost:8080/tweets/" +  tweet.getWriterId());
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+            con.setRequestProperty("JWT", HelloApplication.token);
 
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(tweet);
@@ -305,7 +305,7 @@ public class tweet_controller implements Initializable {
                 URL url = new URL("http://localhost:8080/media/" + HelloApplication.loggedin_user.getId() + "/" + tweet_id + "(" + i + ")" + "/png");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-                con.setRequestProperty("JWT", HelloApplication.loggedin_user.getId() + "," + HelloApplication.token);
+                con.setRequestProperty("JWT", HelloApplication.token);
 
                 System.out.println(HelloApplication.loggedin_user.getId() + "  " + HelloApplication.token);
                 con.setRequestMethod("POST");
