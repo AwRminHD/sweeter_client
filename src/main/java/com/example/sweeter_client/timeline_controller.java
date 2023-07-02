@@ -50,11 +50,14 @@ public class timeline_controller implements Initializable {
     @FXML
     private Button back_button;
     @FXML
+    private Button MoreButton;
+    @FXML
     private ScrollPane tweetScrollPane;
 
     private VBox tweetVbox;
 
-
+    private static ArrayList <Tweet> tweets;
+    private int ind;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setImageToButton(prof_button, "src/main/resources/com/example/sweeter_client/pictures/user.png");
@@ -68,14 +71,20 @@ public class timeline_controller implements Initializable {
         tweetVbox.setStyle("-fx-background-color: #000066;");
         tweetScrollPane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;" + "-fx-focus-color: transparent;" + "-fx-faint-focus-color: transparent;");
 
-        ArrayList <Tweet> tweets = new ArrayList<>();
+        tweets = new ArrayList<>();
         try {
             tweets = getAllTweets();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        for (int i = tweets.size() - 1; i >= 0; i--) {
+        ind = tweets.size() - 1;
+        Load();
+    }
+    public void Load() {
+        int cnt = 0;
+        for (int i = ind; i >= 0; i--, ind--) {
+            if (cnt == 5)
+                break;
             Tweet t = tweets.get(i);
             User usr = new User();
             User usr1 = new User();
@@ -89,13 +98,13 @@ public class timeline_controller implements Initializable {
 
                 if (IsFollowing(HelloApplication.loggedin_user, usr) || HelloApplication.loggedin_user.getId().equals(t.getWriterId()) || NumberOfLikes(t.getId()) >= 10) {
                     tweetVbox.getChildren().add(new tweetComponent(t));
+                    cnt++;
                 }
             }
             catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
     public int NumberOfLikes(String tweetId) throws IOException {
         ArrayList <Like> likes = getAllLikes();
@@ -212,6 +221,14 @@ public class timeline_controller implements Initializable {
 
     public void Back_button_exit() {
         back_button.setStyle("-fx-background-color: #192841;");
+    }
+
+    public void More_button_Entered() {
+        MoreButton.setStyle("-fx-background-color: #9136FF;");
+    }
+
+    public void More_button_exit() {
+        MoreButton.setStyle("-fx-background-color: #192841;");
     }
 
     public void Clear() {
