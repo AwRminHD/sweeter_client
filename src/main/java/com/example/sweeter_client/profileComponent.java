@@ -50,6 +50,7 @@ public class profileComponent extends AnchorPane {
     Label bioLabel;
     Label webLabel;
     Label locLabel;
+    Label sendMessageLabel;
     Button blocklistLabel;
     TextField webTextField;
     TextField locTextField;
@@ -69,6 +70,7 @@ public class profileComponent extends AnchorPane {
         followingLabel = new Label("Following");
         NumberFollowersLabel = new Label(Integer.toString(NumFollowers(user)));
         NumberFollowingLabel = new Label(Integer.toString(NumFollowing(user)));
+        sendMessageLabel = new Label("Send Message");
         FollowButton = new Button();
         blockButton = new Button();
 
@@ -101,7 +103,7 @@ public class profileComponent extends AnchorPane {
         this.getChildren().addAll(circleClipProfile, HeaderImageView, user_idLabel, nameLabel, followersLabel, followingLabel, NumberFollowersLabel, NumberFollowingLabel,
                 bioLabel, bioTextArea, webLabel, locLabel, webTextField, locTextField);
         if (!HelloApplication.loggedin_user.getId().equals(user.getId()))
-            this.getChildren().addAll(FollowButton, blockButton);
+            this.getChildren().addAll(FollowButton, blockButton, sendMessageLabel);
         else
             this.getChildren().add(blocklistLabel);
     }
@@ -130,6 +132,9 @@ public class profileComponent extends AnchorPane {
 
         NumberFollowingLabel.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20));
         NumberFollowingLabel.setTextFill(Paint.valueOf("white"));
+
+        sendMessageLabel.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 15));
+        sendMessageLabel.setTextFill(Paint.valueOf("white"));
 
         FollowButton.setPrefSize(260, 30);
         FollowButton.setStyle("-fx-background-color: gray");
@@ -225,8 +230,23 @@ public class profileComponent extends AnchorPane {
 
         AnchorPane.setLeftAnchor(locTextField, 150.0);
         AnchorPane.setTopAnchor(locTextField, 665.0 + x);
+
+        AnchorPane.setRightAnchor(sendMessageLabel, 10.0);
+        AnchorPane.setTopAnchor(sendMessageLabel, 205.0);
     }
     private void setAction() {
+        sendMessageLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                HelloApplication m = new HelloApplication();
+                DirectView_controller.user = user;
+                try {
+                    m.changeScene(11);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         blocklistLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {

@@ -29,7 +29,7 @@ public class HelloApplication extends Application {
         MainMenu = new Scene((new FXMLLoader(HelloApplication.class.getResource("MainMenu.fxml"))).load());
         SignIn = new Scene((new FXMLLoader(HelloApplication.class.getResource("SigninMenu.fxml"))).load());
         stage.setTitle("Sweeter");
-        stage.setScene(MainMenu);
+        stg.setScene(MainMenu);
         stage.show();
 
     }
@@ -54,6 +54,11 @@ public class HelloApplication extends Application {
             stg.setScene(new Scene((new FXMLLoader(HelloApplication.class.getResource("UserView.fxml"))).load()));
         else if (x == 10)
             stg.setScene(new Scene((new FXMLLoader(HelloApplication.class.getResource("TweetView.fxml"))).load()));
+        else if (x == 11)
+            stg.setScene(new Scene((new FXMLLoader(HelloApplication.class.getResource("DirectView.fxml"))).load()));
+        else if (x == 12)
+            stg.setScene(new Scene((new FXMLLoader(HelloApplication.class.getResource("trendPage.fxml"))).load()));
+
     }
 
     public static void main(String[] args) {

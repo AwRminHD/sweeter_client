@@ -45,6 +45,8 @@ public class prof_controller implements Initializable {
     private Button edit_button;
     @FXML
     private VBox profiles;
+    @FXML
+    private Button trendButton;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setImageToButton(prof_button, "src/main/resources/com/example/sweeter_client/pictures/user.png");
@@ -131,6 +133,17 @@ public class prof_controller implements Initializable {
     }
     public void edit_button_exit() {
         edit_button.setStyle("-fx-background-color: #192841;");
+    }
+
+    public void trend_button_Entered() {
+        trendButton.setStyle("-fx-background-color: #9136FF;");
+    }
+    public void trend_button_exit() {
+        trendButton.setStyle("-fx-background-color: #192841;");
+    }
+    public void trendPressed() throws IOException {
+        HelloApplication m = new HelloApplication();
+        m.changeScene(12);
     }
     public void Clear() {
 

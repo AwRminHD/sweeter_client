@@ -73,8 +73,9 @@ public class search_controller implements Initializable {
     }
 
     public void searching(ActionEvent event) throws IOException {
-        String clue = searchTextField.getText().toLowerCase();
+        String clue = searchTextField.getText();
         if (clue.length() == 0 || clue.charAt(0) != '#') {
+            clue.toLowerCase();
             URL url = new URL("http://localhost:8080/users");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -139,6 +140,8 @@ public class search_controller implements Initializable {
             scrolpane.setContent(vbox);
             vbox.setStyle("-fx-background-color: #000066;");
             scrolpane.setStyle("-fx-border-color: #192841;" + "-fx-background: #192841;" + "track-background-color: #192841;");
+            if (response.equals(""))
+                return;
 
             for (String tweetID : tweets) {
                 Tweet t = getTweet(tweetID);

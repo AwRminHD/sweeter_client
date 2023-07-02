@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="939.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sweeter_client.prof_controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="939.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sweeter_client.prof_controller">
    <center>
       <AnchorPane fx:id="AnchorPaneProfile" prefHeight="743.0" prefWidth="600.0" style="-fx-background-color: #192841;" BorderPane.alignment="CENTER">
          <children>
@@ -33,6 +33,11 @@
                </font>
             </Button>
             <Button fx:id="edit_button" layoutX="541.0" layoutY="4.0" mnemonicParsing="false" onAction="#setEdit_button" onMouseEntered="#edit_button_Entered" onMouseExited="#edit_button_exit" style="-fx-background-color: #192841;" text="Edit" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="trendButton" layoutX="446.0" layoutY="4.0" mnemonicParsing="false" onAction="#trendPressed" onMouseEntered="#trend_button_Entered" onMouseExited="#trend_button_exit" style="-fx-background-color: #192841;" text="Trends" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
